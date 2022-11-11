@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:latest
+    container_name: mydb
+    restart: always
+    ports:
+      - 3306:3306
+    networks:
+      - wordpress_net     
+    volumes:
+      - db:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_RANDOM_ROOT_PASSWORD: '1'
+      MYSQL_DATABASE: mydb
+      MYSQL_USER: myuser
+      MYSQL_PASSWORD: mypwd
+
+  wordpress:
+    image: wordpress:latest
+    container_name: worpress
+    restart: always
+    networks:
+      - wordpress_net     
+    ports:
+      - 8080:80
+    environment:
+      - WORDPRESS_DB_HOST=db
+      - WORDPRESS_DB_USER=myuser
+      - WORDPRESS_DB_PASSWORD=mypwd
+      - WORDPRESS_DB_NAME=mydb
+    volumes:
+      - wordpress:/var/www/html
+networks:
+  wordpress_net:
+volumes:
+  db:
+  wordpress:

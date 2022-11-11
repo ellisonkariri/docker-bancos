@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:latest
+    container_name: "postgres"
+    restart: always
+    ports: 
+      - 5432:5432
+    networks:
+      - post_net
+    volumes:
+      - post_vol:/data/db
+    environment:
+      POSTGRES_USER: postuser 
+      POSTGRES_PASSWORD: postpwd
+      POSTGRES_DB: postdb 
+
+  pgadmin:
+    image: dpage/pgadmin4:6.15
+    container_name: "pgadmin"
+    restart: always
+    ports: 
+      - 8080:80
+    networks:
+      - post_net
+    volumes:
+      - post_vol:/data/db
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=ellison@teste.com
+      - PGADMIN_DEFAULT_PASSWORD=pgpwd 
+networks:
+  post_net:
+volumes:
+  post_vol:
+

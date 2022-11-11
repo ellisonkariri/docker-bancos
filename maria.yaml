@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  db:
+    image: mariadb:10.6
+    container_name: maria
+    restart: always
+    ports:
+     - 3306:3306
+    networks:
+      - mariadb_net
+    volumes:
+      - maria_vol:/data/db
+    environment:
+      MARIADB_USER: mariauser 
+      MARIADB_PASSWORD: mariapwd
+      MYSQL_ROOT_PASSWORD: mariapwd
+      MARIADB_DATABASE: maria_db
+
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    networks:
+      - mariadb_net
+    volumes:
+      - maria_vol:/data/db
+    ports:
+      - 8080:80
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=maria
+      - MYSQL_ROOT_PASSWORD=mariapwd
+networks:
+  mariadb_net:
+volumes:
+  maria_vol:
